@@ -3,7 +3,7 @@
 
 #### Måling af bevægelse:
 - Trackeren skal kunne registrere antal skridt via gyro/accelerometer.
-- Trackeren skal beregne distance (km) baseret på skridt og skridtlængde.
+- Trackeren skal beregne distance (km) baseret på skridt og skridtlængde (og/eller gps module).
 
 #### Måling af puls:
 - Trackeren skal kunne registrere brugerens hjerterytme i realtid.
@@ -16,7 +16,7 @@
 
 #### Dataopsamling:
 - Trackeren skal kunne gemme data lokalt, indtil den kan sende til backend.
-- Data skal kunne overføres trådløst (f.eks. via Bluetooth eller Wi-Fi) til backend.
+- Data skal kunne overføres trådløst via Wi-Fi til backend.
 
 #### Datahåndtering i backend:
 - Backend skal gemme data i en database.
