@@ -3,10 +3,10 @@
 
 #### Måling af bevægelse:
 - Trackeren skal kunne registrere antal skridt via gyro/accelerometer.
-- Trackeren skal beregne distance (km) baseret på skridt og skridtlængde (og/eller gps module).
+- Trackeren skal beregne distance (km) baseret på skridt, skridtlængde eller gps module.
 
 #### Måling af puls:
-- Trackeren skal kunne registrere brugerens hjerterytme i realtid.
+- Trackeren skal kunne registrere brugerens hjerterytme i realtid via en hjerterytime sensor.
 
 #### Energiforbrug:
 - Systemet skal kunne beregne kalorieforbrug baseret på puls, bevægelse og brugerdata (vægt, højde, alder, køn).
