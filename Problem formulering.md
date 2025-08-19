@@ -4,15 +4,19 @@ Hvordan kan vi udvikle en kompakt og brugervenlig wearable fitness tracker, der 
 ### Underordnede spørgsmål:
 
 - Hvilke sensorer er nødvendige for at kunne måle bevægelser, puls og andre fitnessdata pålideligt? <br />
-Accelerometer (Bevægelse & skridt), Gyroskop (rotation & præcision), pulssensor
+Accelerometer (Bevægelse & skridt), Gyroskop (rotation & præcision), pulssensor og GPS
 
-- Hvordan kan data lagres og sendes trådløst på en energieffektiv måde? <br />
-Vi gemmer dataen vha. et eksternt SD kort, dataen bliver sendt til MQTT brokeren via Wifi, når wifi kan forbindes.
+- Hvordan kan data lagres lokalt? <br />
+Vi vil gemme dataen via et eksternt SD Kort.
+
+- Hvordan bliver dataen sendt til databasen? <br />
+dataen bliver sendt til MQTT brokeren via Wifi, når wifi kan forbindes. MQTT brokeren sender dataen videre til vores database.
+Vores database er sat op med MySql.
 
 - Hvordan kan brugerens personlige data (vægt, højde, alder osv.) integreres i beregninger som kalorieforbrug og BMI? <br />
 Kalorieforbrug og BMi bliver beregnet via velkendte formler som vi finder online.
 
-- Hvordan kan data præsenteres på en brugervenlig måde via en app eller et website? <br />
+- Hvordan kan data præsenteres på en brugervenlig måde? <br />
 En forside med et dashboard-visning (grafer)  vil vise de vigtigste detajler som skridt, distance, puls osv.
 Dertil farvekode som kan hjælpe.
 Vi laver også en profil side hvor brugeren kan håndtere deres input (vægt, højde osv.)
