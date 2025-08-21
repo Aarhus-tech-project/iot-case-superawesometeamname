@@ -1,11 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
+import path from 'path';
 
 import userRoutes from './routes/user';
 import dataRoutes from './routes/data';
 
-if (!fs.existsSync('./env')) {
+if (!fs.existsSync(path.join(__dirname, "ext"))) {
 	throw new Error("Missing .env configuration file");
 }
 
