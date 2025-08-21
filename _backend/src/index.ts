@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+
 import userRoutes from './routes/user';
+import dataRoutes from './routes/data';
 
 const app = express();
 const port = 3000;
@@ -12,6 +14,7 @@ app.use(cors({
 }))
 
 app.use('/user', userRoutes);
+app.use('/data', dataRoutes);
 
 app.get('/', (req, res) => {
 	res.send('meow');
