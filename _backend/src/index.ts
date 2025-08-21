@@ -6,7 +6,7 @@ import path from 'path';
 import userRoutes from './routes/user';
 import dataRoutes from './routes/data';
 
-if (!fs.existsSync(path.join(__dirname, "ext"))) {
+if (!fs.existsSync(path.join(__dirname, "../", ".env"))) {
 	throw new Error("Missing .env configuration file");
 }
 
