@@ -11,6 +11,11 @@ interface DBConfig {
 	port?: number;
 }
 
+interface INamedResponse {
+	formattedSql: string;
+	values: any[];
+}
+
 class DBContext {
 	private pool: mysql.Pool;
 
@@ -45,10 +50,48 @@ class DBContext {
 		return rows as T[];
 	}
 
+	async namedQuery<T = any>(sql: string, params: Record<string, any>): Promise<T[]> {
+		const formatted = this.formatNamedSql(sql, params);
+		const { formattedSql, values } = formatted;
+
+		const [rows] = await this.pool.execute<mysql.RowDataPacket[]>(formattedSql, values);
+		return rows as T[];
+	}
+
 	// For INSERT, UPDATE, DELETE queries returning OkPacket info
 	async exec(sql: string, params?: any[]): Promise<mysql.ResultSetHeader> {
 		const [result] = await this.pool.execute<mysql.ResultSetHeader>(sql, params);
 		return result;
+	}
+
+	async namedExec(sql: string, params: Record<string, any>): Promise<mysql.ResultSetHeader> {
+		const formatted = this.formatNamedSql(sql, params);
+		const { formattedSql, values } = formatted;
+
+		const [result] = await this.pool.execute<mysql.ResultSetHeader>(formattedSql, values);
+		return result;
+	}
+
+	private formatNamedSql = (sql: string, params: Record<string, any>): INamedResponse => {
+		const placeholders: string[] = [];
+		const values: any[] = [];
+
+		const formattedSql = sql.replace(/:(\w+)/g, (full, key) => {
+			if (!(key in params)) {
+				throw new Error(`Missing value for parameter :${key}`);
+			}
+			placeholders.push(key);
+			return '?';
+		});
+
+		for (const key of placeholders) {
+			values.push(params[key]);
+		}
+
+		return {
+			formattedSql: formattedSql,
+			values: values
+		}
 	}
 
 	// Close pool connection (if needed)
