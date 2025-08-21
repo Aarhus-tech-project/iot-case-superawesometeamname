@@ -1,15 +1,21 @@
 import express from 'express';
+import cors from 'cors';
+import userRoutes from './routes/user';
 
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-	res.send('Hello from Express + TypeScript!');
-});
+app.use(express.json())
+app.use(cors({
+	origin: "*",
+	methods: ["GET", "POST", "PUT", "DELETE"]
+}))
 
-app.get('/test', (req, res) => {
-	res.send('Test route');
-})
+app.use('/user', userRoutes);
+
+app.get('/', (req, res) => {
+	res.send('meow');
+});
 
 app.listen(port, () => {
 	console.log(`🚀 Server running on http://localhost:${port}`);
