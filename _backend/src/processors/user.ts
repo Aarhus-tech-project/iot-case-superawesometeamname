@@ -1,5 +1,5 @@
 import db from '../DBContext';
-import { IRegister } from '@iot-case/types';
+import { ILogin, IRegister } from '@iot-case/types';
 import { CryptoHash } from './hashing';
 
 class UserProccesor {
@@ -23,6 +23,29 @@ class UserProccesor {
 
 		return result.affectedRows === 1 ? true : false
 
+	}
+
+	login = async (body: ILogin) => {
+		const { username, password } = body;
+
+		const sql = `
+			SELECT * FROM users WHERE username = :username
+		`;
+
+		const result = await db.namedQuery(sql, { username });
+
+		if (result.length === 1) {
+			const user = result[0];
+			const hashedPassword = user.password;
+			const isValid = await CryptoHash.comparePassword(password, hashedPassword);
+
+			if (isValid) {
+				delete user.password;
+				return user;
+			}
+		}
+
+		return null;
 	}
 }
 

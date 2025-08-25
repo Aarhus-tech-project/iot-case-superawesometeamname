@@ -1,46 +1,41 @@
 import { Router, Request, Response } from 'express';
+import processor from '../processors/data';
 
 const router = Router();
 
-// Simple in-memory store
-interface DataItem {
-	id: string;
-	value: any;
-}
-const dataStore: DataItem[] = [];
-
 // POST /api/data - insert data
-router.post('/', (req: Request, res: Response) => {
-	const { id, value } = req.body;
-
-	if (!id || value === undefined) {
-		return res.status(400).json({ error: 'Missing id or value in request body' });
+router.post('/', async (req: Request, res: Response) => {
+	try {
+		const inserted = await processor.insert(req.body)
+		if (inserted) {
+			res.status(200).json({ message: 'Data inserted successfully', response: inserted });
+		} else {
+			res.status(400).json({ message: 'Error inserting data', response: inserted });
+		}
+	} catch (err) {
+		res.status(400).send(err);
 	}
-
-	// Check if id already exists
-	if (dataStore.find(item => item.id === id)) {
-		return res.status(409).json({ error: 'Data with this id already exists' });
-	}
-
-	dataStore.push({ id, value });
-	res.status(201).json({ message: 'Data inserted', data: { id, value } });
-});
+})
 
 // GET /api/data/:id - get data by id
-router.get('/:id', (req: Request, res: Response) => {
-	const { id } = req.params;
-	const item = dataStore.find(d => d.id === id);
-
-	if (!item) {
-		return res.status(404).json({ error: 'Data not found' });
+router.get('/:id', async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const data = await processor.getById(id);
+		res.send(data);
+	} catch (err) {
+		res.status(400).send(err);
 	}
-
-	res.json(item);
 });
 
 // GET /api/data - get all data
-router.get('/', (req: Request, res: Response) => {
-	res.json(dataStore);
+router.get('/', async (req: Request, res: Response) => {
+	try {
+		const data = await processor.getAll();
+		res.send(data);
+	} catch (err) {
+		res.status(400).send(err);
+	}
 });
 
 export default router;

@@ -16,8 +16,17 @@ router.post('/register', async (req, res) => {
 	}
 });
 
-router.post('/login', (req, res) => {
-	res.send('User logged in');
+router.post('/login', async (req, res) => {
+	try {
+		const logged = await processor.login(req.body);
+		if (logged) {
+			res.status(200).send(logged);
+		} else {
+			res.send(404).send("ERROR_DURING_LOGIN");
+		}
+	} catch (err) {
+		res.send(404).send(err);
+	}
 });
 
 export default router;
