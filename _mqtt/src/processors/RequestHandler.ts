@@ -13,7 +13,7 @@ class RequestHandler {
 		const { payload } = packet;
 
 		if (typeof payload !== 'string') {
-			console.log(`RequestHandler::receivedPubMessage - Message from ${client.id} is invalid`)
+			console.log(`RequestHandler::receivedPubMessage - Message from ${client.id} is invalid - type is ${typeof payload} instead of string`)
 			return;
 		}
 
