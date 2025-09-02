@@ -9,10 +9,10 @@ router.post('/register', async (req, res) => {
 		if (registered) {
 			res.status(200).send(registered);
 		} else {
-			res.send(404).send("ERROR_DURING_REGISTER");
+			res.status(404).send("ERROR_DURING_REGISTER");
 		}
 	} catch (err) {
-		res.send(404).send(err);
+		res.status(404).send(err);
 	}
 });
 
@@ -22,10 +22,10 @@ router.post('/login', async (req, res) => {
 		if (logged) {
 			res.status(200).send(logged);
 		} else {
-			res.send(404).send("ERROR_DURING_LOGIN");
+			res.status(404).send("ERROR_DURING_LOGIN");
 		}
 	} catch (err) {
-		res.send(404).send(err);
+		res.status(404).send(err);
 	}
 });
 

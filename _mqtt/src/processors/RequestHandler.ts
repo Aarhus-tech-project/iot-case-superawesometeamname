@@ -17,6 +17,7 @@ class RequestHandler {
 			return;
 		}
 
+		// userId,heartRate,steps,distance,gforce
 		const split = payload.split(',').map(value => parseFloat(value));
 
 		const userId = split[0];
