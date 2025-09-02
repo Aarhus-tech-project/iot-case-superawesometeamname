@@ -10,3 +10,7 @@ With this DBContext we just import it and can easily run both standard & named q
 To begin with mysql2 for node does not support named queries, we could've just easily done it using '?' in the sql instead.<br />
 But since having too many ?'s in a single query can be quite difficult to read, we've introduced 3 extra functions besides the query & exec functionality.<br />
 The 3 new functions are namedQuery, namedExec & formatNamedSql, these functions allow us to used named queries instead of only ? queries making readability better.
+
+#### Creating users - Pt 1
+Issue with creating users, specifically on the part that would hash passwords. <br />
+Forgot a critical await when calling the hashing functionality which would cause a buffer to be inputted into the mysql query instead of the actual hashed password

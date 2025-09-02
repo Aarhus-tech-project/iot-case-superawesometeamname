@@ -7,7 +7,7 @@ class UserProccesor {
 		console.log("UserProccessor::Register - Init:", body)
 		const { username, password, age, height, weight } = body;
 
-		const hashedPassword = CryptoHash.hashPassword(password);
+		const hashedPassword = await CryptoHash.hashPassword(password);
 
 		const sql = `
 			INSERT INTO users (username, password, age, height, weight)
