@@ -27,7 +27,7 @@ class RequestHandler {
 			return;
 		}
 
-		const decoded: IPayload = payload as unknown as IPayload; //JSON.parse(payload);
+		const decoded: IPayload = JSON.parse(payload.toString());
 
 		console.log("RequestHandler::receivedPubMessage - decoded json body:", decoded)
 
