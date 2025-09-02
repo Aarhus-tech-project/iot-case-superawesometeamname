@@ -1,3 +1,0 @@
-# Backend
-
-NodeJS, Express, MySql
