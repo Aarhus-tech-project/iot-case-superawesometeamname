@@ -1,8 +1,8 @@
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { scrypt as _scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 
 // scrypt is callback based so with promisify we can await it
-const scryptAsync = promisify(scrypt);
+const scryptAsync = promisify(_scrypt);
 
 export class CryptoHash {
 

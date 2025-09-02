@@ -4,6 +4,7 @@ import { CryptoHash } from './hashing';
 
 class UserProccesor {
 	register = async (body: IRegister) => {
+		console.log("UserProccessor::Register - body:", body)
 		const { username, password, age, height, weight } = body;
 
 		const hashedPassword = CryptoHash.hashPassword(password);
