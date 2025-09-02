@@ -6,26 +6,28 @@ type IPublishPacket = PublishPacket | PublishPacket & {
 	brokerCounter: number;
 };
 
+interface IPayload {
+	userId: number;
+	steps: number;
+	distance: number;
+	gforce: number;
+	spo2: number;
+	bpm: number;
+	temp: number;
+}
+
 class RequestHandler {
 	receivedPubMessage = async (client: Client, packet: IPublishPacket) => {
 		console.log(`RequestHandler::receivedPubMessage - Received message from ${client.id} on topic ${packet.topic}`)
 
 		const { payload } = packet;
 
-		if (typeof payload !== 'string') {
-			console.log(`RequestHandler::receivedPubMessage - Message from ${client.id} is invalid - type is ${typeof payload} instead of string`)
+		if (typeof payload !== 'object') {
+			console.log(`RequestHandler::receivedPubMessage - Message from ${client.id} is invalid - type is ${typeof payload} instead of object`, payload)
 			return;
 		}
 
-		const decoded: {
-			userId: number;
-			steps: number;
-			distance: number;
-			gforce: number;
-			spo2: number;
-			bpm: number;
-			temp: number;
-		} = JSON.parse(payload);
+		const decoded: IPayload = payload as unknown as IPayload; //JSON.parse(payload);
 
 		console.log("RequestHandler::receivedPubMessage - decoded json body:", decoded)
 
