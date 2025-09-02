@@ -4,7 +4,7 @@ import { CryptoHash } from './hashing';
 
 class UserProccesor {
 	register = async (body: IRegister) => {
-		console.log("UserProccessor::Register - body:", body)
+		console.log("UserProccessor::Register - Init:", body)
 		const { username, password, age, height, weight } = body;
 
 		const hashedPassword = CryptoHash.hashPassword(password);
@@ -14,6 +14,7 @@ class UserProccesor {
 			VALUES (:username, :hashed, :age, :height, :weight)
 		`;
 
+		console.log("UserProccessor::Register - Insert DB")
 		const result = await db.namedExec(sql, {
 			username,
 			hashed: hashedPassword,
@@ -23,7 +24,6 @@ class UserProccesor {
 		})
 
 		return result.affectedRows === 1 ? true : false
-
 	}
 
 	login = async (body: ILogin) => {
