@@ -28,7 +28,7 @@ broker.on("publish", (packet, client) => {
 		// if our topic is not the one we want dont do anything
 		if (packet.topic !== topic) return;
 
-		logger.info('Subscriber', `Recievied packet from ${client?.id} ${packet.messageId}`)
+		logger.info('Subscriber', `Recievied packet from ${client.id} ${packet.brokerId}`)
 
 		RequestHandler.receivedPubMessage(client, packet);
 	} catch (err) {
