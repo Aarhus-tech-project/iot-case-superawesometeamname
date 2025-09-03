@@ -11,7 +11,6 @@ interface IPayload {
 	userId: number;
 	steps: number;
 	distance: number;
-	gforce: number;
 	spo2: number;
 	bpm: number;
 	temp: number;
@@ -31,16 +30,17 @@ class RequestHandler {
 
 		const decoded: IPayload = JSON.parse(payload.toString());
 
-		this.logger.info('receivedPubMessage', `decoded json body: ${decoded}`)
+		this.logger.info('receivedPubMessage', `decoded json body:`)
+		console.log(decoded);
 
 		if (decoded.bpm > 1000 || decoded.bpm <= 0) {
 			this.logger.error('receivedPubMessage', "BPM is invalid, ignoring message. GG the person is dead");
 			return;
 		}
 
-		const { userId, bpm: heartrate, steps, distance, gforce } = decoded;
+		const { userId, bpm, steps, distance, spo2 } = decoded;
 
-		db.insertData(userId, heartrate, steps, distance, gforce);
+		db.insertData(userId, bpm, steps, distance, spo2);
 	}
 
 	empty = () => console.log("\n")
