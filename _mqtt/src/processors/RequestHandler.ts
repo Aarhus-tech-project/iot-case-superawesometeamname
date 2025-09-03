@@ -40,7 +40,7 @@ class RequestHandler {
 
 		const { userId, bpm, steps, distance, spo2 } = decoded;
 
-		db.insertData(userId, bpm, steps, distance, spo2);
+		//db.insertData(userId, bpm, steps, distance, spo2);
 	}
 
 	empty = () => console.log("\n")
