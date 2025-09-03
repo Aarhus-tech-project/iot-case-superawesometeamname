@@ -31,10 +31,10 @@ class RequestHandler {
 
 		const decoded: IPayload = JSON.parse(payload.toString());
 
-		this.logger.info('receivedPubMessage', `RequestHandler::receivedPubMessage - decoded json body: ${decoded}`)
+		this.logger.info('receivedPubMessage', `decoded json body: ${decoded}`)
 
 		if (decoded.bpm > 1000 || decoded.bpm <= 0) {
-			this.logger.error('receivedPubMessage', "RequestHandler::receivedPubMessage - bpm is invalid, ignoring message. GG the person is dead");
+			this.logger.error('receivedPubMessage', "BPM is invalid, ignoring message. GG the person is dead");
 			return;
 		}
 
