@@ -2,29 +2,36 @@
 import aedes from 'aedes';
 import { createServer } from 'net';
 import RequestHandler from './processors/RequestHandler';
+import { LoggerContext } from './LoggerContext';
 
 const mqttPort = 1883;
 const topic = "tracker"; 
 
 const broker = new aedes();
+const logger = new LoggerContext("Broker");
 
 // TCP MQTT server
 const mqttServer = createServer(broker.handle);
 mqttServer.listen(mqttPort, () => {
-	console.log(`🚀 MQTT broker started on port ${mqttPort}`);
+	logger.info('Listen', `🚀 MQTT broker started on port ${mqttPort}`);
 });
 
 mqttServer.on("error", (err) => {
-	console.log("MQTT server error: ", err);
+	logger.error('Error', `MQTT server error: ${err}`);
 })
 
 broker.on("publish", (packet, client) => {
-	// if our client or packet is invalid dont do anything
-	if (!client || !packet) return;
+	try {
+		// if our client or packet is invalid dont do anything
+		if (!client || !packet) return;
 
-	// if our topic is not the one we want dont do anything
-	if (packet.topic !== topic) return;
+		// if our topic is not the one we want dont do anything
+		if (packet.topic !== topic) return;
 
-	RequestHandler.receivedPubMessage(client, packet);
-	RequestHandler.empty();
+		logger.info('Subscriber', `Recievied packet from ${client?.id} ${packet.messageId}`)
+
+		RequestHandler.receivedPubMessage(client, packet);
+	} catch (err) {
+		logger.error('Subcriber', `Error mqtt broker: ${err}`);
+	}
 })

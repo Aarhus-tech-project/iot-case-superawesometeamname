@@ -1,4 +1,5 @@
 import { Client, PublishPacket } from "aedes";
+import { LoggerContext } from "../LoggerContext";
 import db from './DBHandlers'
 
 type IPublishPacket = PublishPacket | PublishPacket & {
@@ -17,30 +18,29 @@ interface IPayload {
 }
 
 class RequestHandler {
+	logger = new LoggerContext("RequestHandler");
 	receivedPubMessage = async (client: Client, packet: IPublishPacket) => {
-		console.log(`RequestHandler::receivedPubMessage - Received message from ${client.id} on topic ${packet.topic}`)
+		this.logger.info('receivedPubMessage', `Received message from ${client.id} on topic ${packet.topic}`)
 
 		const { payload } = packet;
 
 		if (typeof payload !== 'object') {
-			console.log(`RequestHandler::receivedPubMessage - Message from ${client.id} is invalid - type is ${typeof payload} instead of object`, payload)
+			this.logger.error('receivedPubMessage', `Message from ${client.id} is invalid - type is ${typeof payload} instead of object ${payload}`)
 			return;
 		}
 
 		const decoded: IPayload = JSON.parse(payload.toString());
 
-		console.log("RequestHandler::receivedPubMessage - decoded json body:", decoded)
+		this.logger.info('receivedPubMessage', `RequestHandler::receivedPubMessage - decoded json body: ${decoded}`)
 
-		// userId,heartRate,steps,distance,gforce
-		/*const split = payload.split(',').map(value => parseFloat(value));
+		if (decoded.bpm > 1000 || decoded.bpm <= 0) {
+			this.logger.error('receivedPubMessage', "RequestHandler::receivedPubMessage - bpm is invalid, ignoring message. GG the person is dead");
+			return;
+		}
 
-		const userId = split[0];
-		const heartrate = split[1];
-		const steps = split[2];
-		const distance = split[3];
-		const gforce = split[4];*/
+		const { userId, bpm: heartrate, steps, distance, gforce } = decoded;
 
-		//db.insertData(userId, heartrate, steps, distance, gforce);
+		db.insertData(userId, heartrate, steps, distance, gforce);
 	}
 
 	empty = () => console.log("\n")
