@@ -11,6 +11,7 @@ export class LoggerContext {
 		this.context = context;
 
 		const logsDir = path.resolve(__dirname, 'logs');
+		console.log(logsDir)
 		if (!fs.existsSync(logsDir)) {
 			fs.mkdirSync(logsDir);
 		}
