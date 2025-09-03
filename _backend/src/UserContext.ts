@@ -1,3 +1,5 @@
+import { LoggerContext } from "./LoggerContext";
+
 export interface IUserContext {
 	id: Id;
 	username: string;
@@ -6,6 +8,7 @@ export interface IUserContext {
 class UserContext {
 	private static instance: UserContext;
 	private user: IUserContext | null = null;
+	private logger = new LoggerContext("UserContext");
 
 	private constructor() {
 		// Private constructor to prevent manual instantiation
@@ -29,6 +32,7 @@ class UserContext {
 		const result = await db.namedQuery<{ username: string }>(sql, { userId: id });
 
 		if (result.length === 0) {
+			this.logger.error('setUserFromId', `User with id ${id} not found`);
 			throw new Error("User not found");
 		}
 

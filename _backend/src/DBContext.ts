@@ -1,5 +1,6 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import { LoggerContext } from './LoggerContext';
 
 dotenv.config(); // Load .env variables into process.env
 
@@ -18,9 +19,11 @@ interface INamedResponse {
 
 class DBContext {
 	private pool: mysql.Pool;
+	private logger = new LoggerContext("DBContext");
 
 	constructor() {
 		if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD) {
+			this.logger.error('Constructor', "Missing database configuration in .env file");
 			throw new Error("Missing database configuration in .env file");
 		}
 
@@ -78,6 +81,7 @@ class DBContext {
 
 		const formattedSql = sql.replace(/:(\w+)/g, (full, key) => {
 			if (!(key in params)) {
+				this.logger.error('formatNamedSql', `Missing value for parameter: ${key}`)
 				throw new Error(`Missing value for parameter :${key}`);
 			}
 			placeholders.push(key);

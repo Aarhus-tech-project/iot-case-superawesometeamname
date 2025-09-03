@@ -1,10 +1,13 @@
 import db from '../DBContext';
 import { ILogin, IRegister } from '@iot-case/types';
 import { CryptoHash } from './hashing';
+import { LoggerContext } from '../LoggerContext';
+
+const logger = new LoggerContext("Routes::UserProcessor");
 
 class UserProccesor {
 	register = async (body: IRegister) => {
-		console.log("UserProccessor::Register - Init:", body)
+		logger.info('Register', 'Entering account registration');
 		const { username, password, age, height, weight } = body;
 
 		const hashedPassword = await CryptoHash.hashPassword(password);
@@ -14,7 +17,7 @@ class UserProccesor {
 			VALUES (:username, :hashed, :age, :height, :weight)
 		`;
 
-		console.log("UserProccessor::Register - Insert DB")
+		logger.info('Register', "Inserting account")
 		const result = await db.namedExec(sql, {
 			username,
 			hashed: hashedPassword,
@@ -23,10 +26,14 @@ class UserProccesor {
 			weight
 		})
 
-		return result.affectedRows === 1 ? true : false
+		const inserted = result.affectedRows === 1;
+		if (inserted) logger.info('Register', "Inserted account")
+
+		return inserted;
 	}
 
 	login = async (body: ILogin) => {
+		logger.info("Login", 'Entering user login')
 		const { username, password } = body;
 
 		const sql = `
@@ -42,10 +49,12 @@ class UserProccesor {
 
 			if (isValid) {
 				delete user.password;
+				logger.info("Login", 'Successfully logged into user');
 				return user;
 			}
 		}
 
+		logger.info("Login", 'Could not login to user');
 		return null;
 	}
 }

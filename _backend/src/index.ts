@@ -5,8 +5,11 @@ import path from 'path';
 
 import userRoutes from './routes/user';
 import dataRoutes from './routes/data';
+import { LoggerContext } from './LoggerContext';
+const logger = new LoggerContext("Index")
 
 if (!fs.existsSync(path.join(__dirname, "../", ".env"))) {
+	logger.error('ENV', 'Missing .env configuration file... exiting');
 	throw new Error("Missing .env configuration file");
 }
 
@@ -27,9 +30,9 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-	console.log(`🚀 Server running on http://localhost:${port}`);
+	logger.info('Listen', `🚀 Server running on http://localhost:${port}`);
 
 	return () => {
-		console.log('Closing server');
+		logger.info('Listen', `🚀 Closing server`);
 	}
 });

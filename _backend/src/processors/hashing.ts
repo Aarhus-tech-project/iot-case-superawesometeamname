@@ -6,8 +6,6 @@ const scryptAsync = promisify(_scrypt);
 
 export class CryptoHash {
 	static async hashPassword(password: BinaryLike) {
-		console.log("CryptoHash::HashPassword - Hashing password", password);
-
 		const salt = randomBytes(16).toString("hex");
 		const buf = (await scryptAsync(password, salt, 64)) as Buffer;
 		return `${buf.toString("hex")}.${salt}`;
