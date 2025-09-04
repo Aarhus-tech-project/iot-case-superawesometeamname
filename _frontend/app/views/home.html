@@ -1,0 +1,17 @@
+<h2 class="text-2xl font-bold mb-4">Dashboard</h2>
+<p class="text-gray-700 mb-4">Welcome, {{user.username || "Master"}}!</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold">Steps</h3>
+    <p class="text-3xl font-bold">{{steps || 0}}</p>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold">Heart Rate</h3>
+    <p class="text-3xl font-bold">{{bpm || "--"}} bpm</p>
+  </div>
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold">SpO₂</h3>
+    <p class="text-3xl font-bold">{{spo2 || "--"}}%</p>
+  </div>
+</div>

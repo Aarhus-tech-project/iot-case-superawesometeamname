@@ -1,0 +1,23 @@
+<div class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <header class="bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-blue-600">Tracker</h1>
+      <nav class="space-x-6">
+        <a href="#!/home" class="hover:text-blue-600">Home</a>
+        <a href="#!/profile" class="hover:text-blue-600">Profile</a>
+        <a href="#!/" class="hover:text-blue-600">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <main class="flex-1 max-w-6xl mx-auto px-4 py-6">
+    <div ng-view></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-200 py-3 text-center text-sm text-gray-600">
+    © 2025 Tracker App — All rights reserved
+  </footer>
+</div>

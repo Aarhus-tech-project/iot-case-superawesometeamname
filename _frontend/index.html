@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Tracker App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    <link rel="stylesheet" href="/styles/main.css">
+    <script type="module" src="/app/app.js"></script>
+    <script src="/app/controllers/loginController.js"></script>
+    <script src="/app/controllers/homeController.js"></script>
+    <script src="/app/controllers/profileController.js"></script>
+  </head>
+  <body>
+    <!-- Base layout wrapper -->
+    <div ng-include="'app/views/layout.html'"></div>
+  </body>
+</html>
