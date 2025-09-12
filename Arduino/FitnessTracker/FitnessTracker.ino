@@ -4,6 +4,7 @@
 #include "Accelerometer.h"
 #include "PulseSensor.h"
 #include "OLED.h"
+#include "GPS.h"
 
 // ---- WiFi ----
 const char* ssid     = "h4prog";
@@ -20,6 +21,12 @@ MqttClient mqtt(wifiClient);
 #define I2C_ADDRESS 0x57
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
 DFRobot_BloodOxygen_S_I2C MAX30102(&Wire, I2C_ADDRESS);
+ADXL313 myAdxl;
+int steps = 0;
+float strideLength = 0.75;
+float distance = 0.00;
+TinyGPSPlus gps;
+HardwareSerial GPSSerial(1);
 
 void connectWiFi() {
   Serial.println("Connecting to WiFi...");
@@ -53,11 +60,14 @@ void connectToMQTT() {
 
 // ---- Publish MQTT payload ----
 void publishData() {
-  float distance = steps * strideLength / 1000.0; // km
 
   int spo2, bpm;
   float tempC;
   measureVitals(spo2, bpm, tempC);
+
+  double lat = 0, lng = 0, hdop = 0;
+  int sats = 0;
+  bool hasFix = getCoordinates(lat, lng, sats, hdop);
 
   String payload = "{";
   payload += "\"userId\":" + String(1) + ",";
@@ -65,7 +75,16 @@ void publishData() {
   payload += "\"distance\":" + String(distance, 2) + ",";
   payload += "\"spo2\":" + String(spo2) + ",";
   payload += "\"bpm\":" + String(bpm) + ",";
-  payload += "\"temp\":" + String(tempC, 1);
+  payload += "\"temp\":" + String(tempC, 1) + ",";   // <-- always end with comma
+
+  if (hasFix) {
+    payload += "\"lat\":" + String(lat, 6) + ",";
+    payload += "\"lng\":" + String(lng, 6) + ",";
+    payload += "\"sats\":" + String(sats) + ",";
+    payload += "\"hdop\":" + String(hdop, 2);
+  } else {
+    payload += "\"lat\":0,\"lng\":0,\"sats\":0,\"hdop\":0";
+  }
   payload += "}";
 
   Serial.println("Publishing: " + payload);
@@ -85,7 +104,7 @@ void loop() {
 
   static unsigned long lastSend = 0;
   if (millis() - lastSend > 3000) {  // every 3s
-    publishData();
+    //publishData();
     lastSend = millis();
   }
 
@@ -102,9 +121,11 @@ void setup() {
   Serial.begin(115200);
   while (!Serial);
 
+  Wire.begin();
   //connectWiFi();
   initADXL313();
-  initMAX30102();
-  initOLED();
- //connectToMQTT();
+  //initMAX30102();
+  //initOLED();
+  //initGPS();
+  //connectToMQTT();
 }
